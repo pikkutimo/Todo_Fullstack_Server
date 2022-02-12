@@ -23,6 +23,15 @@ let todos = [
     }
 ]
 
+const generateId = () => {
+    const maxId = todos.length > 0
+      ? Math.max(...todos.map(n => n.id))
+      : 0
+    return maxId + 1
+  }
+
+app.use(express.json())
+
 app.get('/', (req, res) => {
   res.send('Todo app')
 })
@@ -41,6 +50,37 @@ app.get('/api/todos/:id', (req, res) => {
     res.status(404).send(`The todo with id ${id} doesn't exist.`)
   }
   
+})
+
+var bodyParser = require('body-parser')
+app.use(bodyParser.json())
+
+app.delete('/api/todos/:id', function(req, res) {
+  const { id } = req.params;
+  todos = todos.filter(todo => todo.id !== id)
+
+  res.status(204).end()
+})
+
+app.post('/api/todos', function (req, res) {
+    const body = req.body
+    
+    if (!body.content) {
+        return response.status(400).json({ 
+          error: 'content missing' 
+        })
+    }
+
+    const todo = {
+        id: generateId(),
+        content: body.content,
+        date: new Date(),
+        important: body.important || false,
+    }
+    
+    todos = todos.concat(todo)
+
+    res.json(todo)
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
