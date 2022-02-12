@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
 const port = 3000
 
 let todos = [
@@ -30,7 +31,12 @@ const generateId = () => {
     return maxId + 1
   }
 
+morgan.token('body', req => {
+return JSON.stringify(req.body)
+})
+
 app.use(express.json())
+app.use(morgan(':method :url :status :response-time :body'))
 
 app.get('/', (req, res) => {
   res.send('Todo app')
@@ -82,5 +88,11 @@ app.post('/api/todos', function (req, res) {
 
     res.json(todo)
 })
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+}
+    
+app.use(unknownEndpoint)
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
