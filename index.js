@@ -1,35 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
-const port = 3000
-
-let todos = [
-    {
-        id: 1,
-        content: 'Wash dishes',
-        date: '2022-05-30T17:30:31.098Z',
-        important: false
-    },
-    {
-        id: 2,
-        content: 'Do Homework',
-        date: '2022-05-30T18:30:31.098Z',
-        important: true
-    },
-    {
-        id: 3,
-        content: 'Take the dog out',
-        date: '2022-05-29T11:30:31.098Z',
-        important: true
-    }
-]
-
-const generateId = () => {
-    const maxId = todos.length > 0
-      ? Math.max(...todos.map(n => n.id))
-      : 0
-    return maxId + 1
-  }
+const PORT = process.env.PORT
+const Todo = require('./models/todo')
 
 morgan.token('body', req => {
 return JSON.stringify(req.body)
@@ -38,24 +12,39 @@ return JSON.stringify(req.body)
 app.use(express.json())
 app.use(morgan(':method :url :status :response-time :body'))
 
+const errorHandler = (error, req, res, next) => {
+    console.log(error)
+
+    if (error.name === 'CastError') {
+        return res.status(400).send({ error: 'malformed id' })
+    }
+
+    next(error)
+}
+
+app.use(errorHandler)
+
 app.get('/', (req, res) => {
   res.send('Todo app')
 })
 
 app.get('/api/todos', (req, res) => {
-    res.json(todos)
+    Todo.find({})
+        .then(todos => {
+            res.json(todos)
+        })
 })
 
-app.get('/api/todos/:id', (req, res) => {
-  const id = req.params.id
-  const todo = todos.find(todo => todo.id == id)
-  
-  if (todo) {
-    res.json(todo)
-  } else {
-    res.status(404).send(`The todo with id ${id} doesn't exist.`)
-  }
-  
+app.get('/api/todos/:id', (req, res, next) => {
+    Todo.findById(req.params.id)
+        .then(todo => {
+            if (todo) {
+                res.json(todo)
+            } else {
+                res.status(404).end()
+            }
+        })
+        .catch(error => next(error))
 })
 
 var bodyParser = require('body-parser')
@@ -71,22 +60,22 @@ app.delete('/api/todos/:id', function(req, res) {
 app.post('/api/todos', function (req, res) {
     const body = req.body
     
-    if (!body.content) {
-        return response.status(400).json({ 
+    if (body.content === undefined) {
+        return res.status(400).json({ 
           error: 'content missing' 
         })
     }
 
-    const todo = {
-        id: generateId(),
+    const todo = new Todo ({
         content: body.content,
         date: new Date(),
         important: body.important || false,
-    }
+    })
     
-    todos = todos.concat(todo)
-
-    res.json(todo)
+    todo.save()
+        .then(savedTodo => {
+            res.json(savedTodo)
+        })
 })
 
 const unknownEndpoint = (request, response) => {
@@ -95,4 +84,4 @@ const unknownEndpoint = (request, response) => {
     
 app.use(unknownEndpoint)
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
