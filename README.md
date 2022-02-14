@@ -1,2 +1,11 @@
 # Todo_Fullstack_Server
-Todo with db, server and frontend.
+
+Backend for the Todo app.
+
+## Technologies
+
+### MongoDB
+
+### Node.js & Express
+
+
