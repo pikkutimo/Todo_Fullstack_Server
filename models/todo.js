@@ -11,6 +11,7 @@ const todoSchema = new mongoose.Schema({
     required: true
   },
   important: Boolean,
+  done: Boolean,
 })
 
 todoSchema.set('toJSON', {
