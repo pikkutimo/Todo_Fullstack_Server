@@ -36,7 +36,7 @@ todoRouter.post('/', function (req, res, next) {
     content: body.content,
     date: new Date(),
     important: body.important || false,
-    done: false,
+    done: body.done || false,
   })
 
   todo.save()
