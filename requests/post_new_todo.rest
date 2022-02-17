@@ -2,7 +2,7 @@ POST https://rocky-harbor-47876.herokuapp.com/api/todos
 Content-Type: application/json
 
 {
-    "content": "Test case #5",
+    "content": "Test case #6",
     "important": true,
     "done": true
 }

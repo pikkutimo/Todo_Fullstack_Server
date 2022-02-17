@@ -1,7 +1,8 @@
-PUT http://localhost:3001/api/todos/6208c29942c97ad1a8f712ee
+PUT https://rocky-harbor-47876.herokuapp.com/api/todos/620de3f52b27984a0f81e370
 Content-Type: application/json
 
 {
     "content": "I am updated",
-    "important": true
+    "important": true,
+    "done": true
 }
