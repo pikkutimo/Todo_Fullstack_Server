@@ -47,11 +47,11 @@ todoRouter.post('/', function (req, res, next) {
 })
 
 todoRouter.put('/:id', (req, res, next) => {
-  const { content, important } = req.body
+  const { content, important, done } = req.body
 
   Todo.findByIdAndUpdate(
     req.params.id,
-    { content, important },
+    { content, important, done },
     { new:true, runValidators: true, context: 'query' }
   )
     .then(updateTodo => {

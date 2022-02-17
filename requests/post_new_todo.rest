@@ -1,7 +1,8 @@
-POST http://localhost:3001/api/todos
+POST https://rocky-harbor-47876.herokuapp.com/api/todos
 Content-Type: application/json
 
 {
-    "content": "Test MongoDB",
-    "imortant": true
+    "content": "Test case #4",
+    "important": true,
+    "done": true
 }
