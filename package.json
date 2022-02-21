@@ -4,10 +4,10 @@
   "description": "Todo with db, server and frontend.",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node index.js",
-    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
     "deploy": "git push heroku main",
-    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+    "test": "NODE_ENV=test jest --verbose --runInBand",
     "lint": "eslint ."
   },
   "repository": {
