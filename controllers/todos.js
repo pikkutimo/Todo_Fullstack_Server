@@ -1,8 +1,7 @@
 const todoRouter = require('express').Router()
-const todo = require('../models/todo')
 const Todo = require('../models/todo')
 
-todoRouter.get('/', (req, res) => {
+todoRouter.get('/', async (req, res) => {
   Todo.find({})
     .then(todos => {
       res.json(todos)
@@ -41,7 +40,7 @@ todoRouter.post('/', function (req, res, next) {
 
   todo.save()
     .then(savedTodo => {
-      res.json(savedTodo)
+      res.status(201).json(savedTodo)
     })
     .catch(error => next(error))
 })

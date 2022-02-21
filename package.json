@@ -4,9 +4,10 @@
   "description": "Todo with db, server and frontend.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
+    "deploy": "git push heroku main",
+    "test": "NODE_ENV=test jest --verbose --runInBand",
     "lint": "eslint ."
   },
   "repository": {
@@ -26,7 +27,13 @@
     "mongoose": "^6.2.1"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^8.9.0",
-    "nodemon": "^2.0.15"
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
