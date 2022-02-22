@@ -1,8 +1,8 @@
 name: Deploy
 
 env:
-  MONGODB_URI: ${{ secrets.MONGODB_URI }}
-  TEST_MONGODB_URI: $${{ secrets.TEST_MONGODB_URI }}
+  MONGODB_URI: mongodb+srv://admin:admin@cluster0.ag0nh.mongodb.net/todosApp?retryWrites=true&w=majority
+  TEST_MONGODB_URI: mongodb+srv://admin:admin@cluster0.ag0nh.mongodb.net/todosAppTest?retryWrites=true&w=majority
 
 on:
   push:
