@@ -13,4 +13,8 @@ Backend for the Todo app.
 
 ### Node.js & Express
 
+## Heroku
+
+Deploys through Github actions onto Heroku.
+
 

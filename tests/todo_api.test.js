@@ -1,32 +1,20 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 const supertest = require('supertest')
 const app = require('../app')
-
+const helper = require('./test_helper')
 const api = supertest(app)
 
 const Todo = require('../models/todo')
-
-const initialTodos = [
-  {
-    content: 'First todo',
-    date: new Date(),
-    important: false,
-    done: false
-  },
-  {
-    content: 'Second todo',
-    date: new Date(),
-    important: true,
-    done: false
-  },
-]
+const User = require('../models/user')
 
 beforeEach(async () => {
   await Todo.deleteMany({})
-  let todoObject = new Todo(initialTodos[0])
-  await todoObject.save()
-  todoObject = new Todo(initialTodos[1])
-  await todoObject.save()
+
+  const todoObjects = helper.initialTodos
+    .map(todo => new Todo(todo))
+  const promiseArray = todoObjects.map(todo => todo.save())
+  await Promise.all(promiseArray)
 })
 
 test('notes are returned as json', async () => {
@@ -37,15 +25,15 @@ test('notes are returned as json', async () => {
 })
 
 test('all 2 notes are returned', async () => {
-  const response = await api.get('/api/todos')
+  const res = await api.get('/api/todos')
 
-  expect(response.body).toHaveLength(2)
+  expect(res.body).toHaveLength(2)
 })
 
 test('a specific todo is within the returned todos', async () => {
-  const response = await api.get('/api/todos')
+  const res = await api.get('/api/todos')
 
-  const contents = response.body.map(r => r.content)
+  const contents = res.body.map(r => r.content)
   expect(contents).toContain(
     'First todo'
   )
@@ -63,11 +51,11 @@ test('a valid todo can be added', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/todos')
+  const res = await api.get('/api/todos')
 
-  const contents = response.body.map(r => r.content)
+  const contents = res.body.map(r => r.content)
 
-  expect(response.body).toHaveLength(initialTodos.length + 1)
+  expect(res.body).toHaveLength(helper.initialTodos.length + 1)
   expect(contents).toContain(
     'Third todo'
   )
@@ -83,9 +71,64 @@ test('todo without content is not added', async () => {
     .send(newTodo)
     .expect(400)
 
-  const response = await api.get('/api/todos')
+  const res = await api.get('/api/todos')
 
-  expect(response.body).toHaveLength(initialTodos.length)
+  expect(res.body).toHaveLength(helper.initialTodos.length)
+})
+
+describe('when there is initially one user in db', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+
+    await user.save()
+  })
+
+  test('creation succeeds with fresh username', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'timotest',
+      name: 'Timo Testi',
+      password: 'salainen',
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+
+    const usernames = usersAtEnd.map(user => user.username)
+    expect(usernames).toContain(newUser.username)
+  })
+
+  test('creation fails with proper statuscode and message if username already taken', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'root',
+      name: 'Superuser',
+      password: 'salainen',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('username must be unique')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toEqual(usersAtStart)
+  })
 })
 
 afterAll(() => {

@@ -1,48 +1,70 @@
 const todoRouter = require('express').Router()
 const Todo = require('../models/todo')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 todoRouter.get('/', async (req, res) => {
-  Todo.find({})
-    .then(todos => {
-      res.json(todos)
-    })
+  const todos = await Todo
+    .find({}).populate('user', { username: 1, name: 1 })
+  res.json(todos)
 })
 
-todoRouter.get('/:id', (req, res, next) => {
-  Todo.findById(req.params.id)
-    .then(todo => {
-      if (todo) {
-        res.json(todo)
-      } else {
-        res.status(404).end()
-      }
-    })
-    .catch(error => next(error))
+todoRouter.get('/:id', async (req, res, next) => {
+  try {
+    const todo = await Todo.findById(req.params.id)
+
+    if (todo) {
+      res.json(todo)
+    } else {
+      res.status(404).end()
+    }
+  } catch (exception) {
+    next(exception)
+  }
 })
 
-todoRouter.delete('/:id', function(req, res, next) {
-  Todo.findByIdAndRemove(req.params.id)
-    .then(result => {
-      res.status(204).end()
-    })
-    .catch( error => next(error))
+todoRouter.delete('/:id', async (req, res, next) => {
+  try {
+    await Todo.findByIdAndRemove(req.params.id)
+    res.status(204).end()
+  } catch (exception) {
+    next(exception)
+  }
 })
 
-todoRouter.post('/', function (req, res, next) {
-  const body = req.body
+const getTokenFrom = req => {
+  const authorization = req.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
-  const todo = new Todo ({
-    content: body.content,
+todoRouter.post('/', async (req, res) => {
+  const { content, important, done } = req.body
+
+  const token = getTokenFrom(req)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+
+  if(!token || !decodedToken.id) {
+    return res.status(401).json({ error: 'token missing or invalid' })
+  }
+
+  const user = await User.findById(decodedToken.id)
+
+  const todo = new Todo({
+    content: content,
     date: new Date(),
-    important: body.important || false,
-    done: body.done || false,
+    important: important || false,
+    done: done || false,
+    user: user._id
   })
 
-  todo.save()
-    .then(savedTodo => {
-      res.status(201).json(savedTodo)
-    })
-    .catch(error => next(error))
+  const savedTodo = await todo.save()
+  user.todos = user.todos.concat(savedTodo._id)
+  await user.save()
+
+  res.status(201).json(savedTodo)
 })
 
 todoRouter.put('/:id', (req, res, next) => {
