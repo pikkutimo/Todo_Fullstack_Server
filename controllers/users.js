@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
+const Todo = require('../models/todo')
 
 usersRouter.post('/', async (req, res) => {
   const { username, name, password } = req.body
@@ -33,5 +34,17 @@ usersRouter.get('/', async (req, res) => {
 
   res.json(users)
 })
+
+usersRouter.get('/:id', async (req, res, next) => {
+
+  try {
+    const result = await User.findById(req.params.id).populate('todos')
+    console.log(result.todos)
+    res.json(result.todos)
+  } catch (exception) {
+    next(exception)
+  }
+})
+
 
 module.exports = usersRouter
