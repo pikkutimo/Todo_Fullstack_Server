@@ -37,13 +37,11 @@ usersRouter.get('/', async (req, res) => {
 
 usersRouter.get('/:id', async (req, res, next) => {
 
-  try {
-    const result = await User.findById(req.params.id).populate('todos')
-    console.log(result.todos)
-    res.json(result.todos)
-  } catch (exception) {
-    next(exception)
-  }
+  const userId = req.params.id
+
+  const todos = await Todo.find({ user: userId })
+
+  res.json(todos)
 })
 
 
