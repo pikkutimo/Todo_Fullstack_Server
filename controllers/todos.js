@@ -27,14 +27,9 @@ todoRouter.get('/:id', async (req, res, next) => {
 
 todoRouter.delete('/:id', async (req, res, next) => {
   try {
-    const todo = await Todo.findById(req.params.id)
-    if (todo.user.toString() === req.payload) {
-      await Todo.findByIdAndRemove(req.params.id)
-      res.status(204).end()
-    } else {
-      res.status(401).end()
-    }
-  } catch (exception) {
+    await Todo.findByIdAndRemove(req.params.id)
+    res.status(204).end()
+  }catch (exception) {
     next(exception)
   }
 })
