@@ -1,19 +1,21 @@
 const todoRouter = require('express').Router()
 const Todo = require('../models/todo')
 const User = require('../models/user')
-const jwt = require('jsonwebtoken')
 
-todoRouter.get('/', async (req, res) => {
-  const todos = await Todo
-    .find({}).populate('user', { username: 1, name: 1 })
-  res.json(todos)
+todoRouter.get('/', async (req, res, next) => {
+  try {
+    const todos = await Todo.find({ user: req.payload })
+    res.json(todos)
+  } catch (exception) {
+    next(exception)
+  }
 })
 
 todoRouter.get('/:id', async (req, res, next) => {
   try {
     const todo = await Todo.findById(req.params.id)
 
-    if (todo) {
+    if (todo && todo.user.toString() === req.payload) {
       res.json(todo)
     } else {
       res.status(404).end()
@@ -25,32 +27,22 @@ todoRouter.get('/:id', async (req, res, next) => {
 
 todoRouter.delete('/:id', async (req, res, next) => {
   try {
-    await Todo.findByIdAndRemove(req.params.id)
-    res.status(204).end()
+    const todo = await Todo.findById(req.params.id)
+    if (todo.user.toString() === req.payload) {
+      await Todo.findByIdAndRemove(req.params.id)
+      res.status(204).end()
+    } else {
+      res.status(401).end()
+    }
   } catch (exception) {
     next(exception)
   }
 })
 
-const getTokenFrom = req => {
-  const authorization = req.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-  return null
-}
-
 todoRouter.post('/', async (req, res) => {
   const { content, important, done } = req.body
 
-  const token = getTokenFrom(req)
-  const decodedToken = jwt.verify(token, process.env.SECRET)
-
-  if(!token || !decodedToken.id) {
-    return res.status(401).json({ error: 'token missing or invalid' })
-  }
-
-  const user = await User.findById(decodedToken.id)
+  const user = await User.findById(req.payload)
 
   const todo = new Todo({
     content: content,

@@ -1,8 +1,8 @@
 post http://localhost:3002/api/todos
 Content-Type: application/json
-Authorization: bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRlc3RpMSIsImlkIjoiNjIxNjE4MTEzODViNmYyM2E0YmNmMjE5IiwiaWF0IjoxNjQ1NjE1MjM5fQ
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZyYW5zIiwiaWQiOiI2MjMwNTVhMTYzZDQxYTNlZjdmNTRmNzYiLCJpYXQiOjE2NDczMzQ4NjcsImV4cCI6MTY0NzMzODQ2N30.fnSd5Li05XXVroW_skvF11hZHTkEEXyIk6w7rq6Yb6E
 
 {
-    "content": "Test#30 - added express-async-errors",
+    "content": "FRANS - auth test #2 -delete",
     "important": true
 }

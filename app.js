@@ -27,10 +27,11 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(middleware.requestLogger)
 
-app.use('/api/todos', todoRouter)
-app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/signup', signupRouter)
+app.use(middleware.verifyToken)
+app.use('/api/todos', todoRouter)
+app.use('/api/users', userRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

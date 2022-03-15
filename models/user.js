@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    validate: [isEmail, 'The email is already signed up'],
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
   },
   todos: [
