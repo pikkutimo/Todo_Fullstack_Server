@@ -1,10 +1,30 @@
 const mongoose = require('mongoose')
 
+const isEmail = async (email) => {
+  const existingEmail = await User.find({ email })
+  if (existingEmail) {
+    return false
+  }
+
+  return true
+}
+
 const userSchema = new mongoose.Schema({
-  username: String,
-  name: String,
+  username: {
+    type: String,
+    required: true
+  },
+  name: {
+    type: String,
+    required: true
+  },
   passwordHash: String,
-  email: String,
+  email: {
+    type: String,
+    required: true,
+    validate: [isEmail, 'The email is already signed up'],
+    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+  },
   todos: [
     {
       type: mongoose.Schema.Types.ObjectId,
