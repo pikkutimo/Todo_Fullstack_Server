@@ -7,6 +7,17 @@ Backend for the Todo app.
 3. Remove todos
 4. Mark as done
 
+## Provided APIs
+
+/api/login
+/api/todos
+/api/login
+
+**Added**
+
+/api/signup
+/api/admin - not functional yet
+
 ## Technologies
 
 ### MongoDB
@@ -14,6 +25,8 @@ Backend for the Todo app.
 ### Node.js & Express
 
 ## Heroku
+
+## JSONWebToken
 
 Deploys through Github actions onto Heroku.
 

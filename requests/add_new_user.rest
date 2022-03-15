@@ -1,8 +1,9 @@
-POST http://localhost:3002/api/users
+POST http://localhost:3002/api/signup
 Content-Type: application/json
 
 {
-    "username": "Testi3",
-    "name": "Testi Kolmonen",
-    "password": "testi3"
+    "username": "Liisa",
+    "name": "Liisa Vilen",
+    "password": "Liisa",
+    "email": "vilen@liisa.com"
 }

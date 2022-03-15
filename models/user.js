@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema({
   username: String,
   name: String,
   passwordHash: String,
+  email: String,
   todos: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -15,6 +16,7 @@ const userSchema = new mongoose.Schema({
 userSchema.set('toJSON', {
   transform: (document, returedObject) => {
     returedObject.id = returedObject._id.toString()
+    delete returedObject.email
     delete returedObject._id
     delete returedObject.__v
     // The passwordHash should not be revealed
