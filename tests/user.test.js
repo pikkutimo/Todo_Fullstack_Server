@@ -1,19 +1,20 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
 const supertest = require('supertest')
-const jwt = require('jsonwebtoken')
+
 const User = require('../models/user')
+const Todo = require('../models/todo')
 const app = require('../app')
-const helper = require('./test_helper')
 const api = supertest(app)
 
 let receivedToken = null
+let postId = null
 
 beforeEach( async () => {
   //Clear the userdatabase
   await User.deleteMany()
+  await Todo.deleteMany()
   //Create a test user
-  const response = await api.post('/api/signup')
+  await api.post('/api/signup')
     .send({
       username: 'test',
       name: 'Test Tetson',
@@ -28,6 +29,15 @@ beforeEach( async () => {
     })
 
   receivedToken = response2.body.token
+
+  const response3 = await api.post('/api/todos')
+    .set('Authorization', `bearer ${receivedToken}`)
+    .send({
+      content: 'This is a todo',
+      important: true
+    })
+
+  postId = await response3.body.id
 })
 
 test('Should not signup a new user with username already in use', async () => {
@@ -73,6 +83,19 @@ test('Logged user should be able to post new todos', async () => {
     })
 
   expect(response.statusCode).toBe(201)
+})
+
+test('Logged user should be able to edit todos', async () => {
+
+  const response = await api.put(`/api/todos/${postId}`)
+    .set('Authorization', `bearer ${receivedToken}`)
+    .send({
+      content: 'This is a edit test',
+      important: false
+    })
+    .expect(200)
+  
+  expect(response.body.content).toBe('This is a edit test')
 })
 
 afterAll(() => {

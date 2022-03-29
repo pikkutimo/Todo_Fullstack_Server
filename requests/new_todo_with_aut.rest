@@ -1,8 +1,8 @@
-post http://localhost:3002/api/todos
+post https://rocky-harbor-47876.herokuapp.com/api/todos
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZyYW5zIiwiaWQiOiI2MjMwNTVhMTYzZDQxYTNlZjdmNTRmNzYiLCJpYXQiOjE2NDczMzQ4NjcsImV4cCI6MTY0NzMzODQ2N30.fnSd5Li05XXVroW_skvF11hZHTkEEXyIk6w7rq6Yb6E
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZyYW5zIiwiaWQiOiI2MjMwNTVhMTYzZDQxYTNlZjdmNTRmNzYiLCJpYXQiOjE2NDg1MzI1MjUsImV4cCI6MTY0ODUzNjEyNX0.DyeZFikZ4QQMMXTCYmV906bwiNqRcctfd6w3sKYJIb4
 
 {
-    "content": "FRANS - auth test #2 -delete",
+    "content": "FRANS - 29032022 - add new",
     "important": true
 }
