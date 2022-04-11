@@ -28,7 +28,8 @@ beforeEach( async () => {
       password: 'test123'
     })
 
-  receivedToken = await response2.body.token
+  const receivedResponse = await response2.body.token
+  receivedToken = receivedResponse.toString()
   console.log('*******************')
   console.log(receivedToken)
   console.log('*******************')
