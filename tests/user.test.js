@@ -29,6 +29,9 @@ beforeEach( async () => {
     })
 
   receivedToken = await response2.body.token
+  console.log('*******************')
+  console.log(receivedToken)
+  console.log('*******************')
 
   const response3 = await api.post('/api/todos')
     .set('Authorization', `bearer ${receivedToken}`)
