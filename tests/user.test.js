@@ -18,7 +18,7 @@ beforeEach( async () => {
     .send({
       username: 'test',
       name: 'Test Tetson',
-      email: 'test@tetson.coma',
+      email: 'test@tetson.com',
       password: 'test123'
     })
 
