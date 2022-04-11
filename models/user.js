@@ -1,14 +1,5 @@
 const mongoose = require('mongoose')
 
-const isEmail = async (email) => {
-  const existingEmail = await User.find({ email })
-  if (existingEmail) {
-    return false
-  }
-
-  return true
-}
-
 const userSchema = new mongoose.Schema({
   username: {
     type: String,

@@ -33,6 +33,7 @@ app.use(middleware.verifyToken)
 app.use('/api/todos', todoRouter)
 app.use('/api/users', userRouter)
 
+app.use(middleware.errorLogger)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 

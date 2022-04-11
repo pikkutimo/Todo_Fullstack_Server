@@ -1,4 +1,4 @@
-post https://rocky-harbor-47876.herokuapp.com/api/login
+post http://localhost:3002/api/login
 Content-Type: application/json
 
 {

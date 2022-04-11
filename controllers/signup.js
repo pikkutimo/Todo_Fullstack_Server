@@ -2,14 +2,17 @@ const bcrypt = require('bcrypt')
 const signupRouter = require('express').Router()
 const User = require('../models/user')
 
-signupRouter.post('/', async (req, res) => {
+signupRouter.post('/', async ( req, res ) => {
   const { username, name, password, email } = req.body
 
-  const existingUser = await User.findOne({ username })
+  let existingUser = await User.findOne({ username })
   if (existingUser) {
-    return res.status(400).json({
-      error: 'username must be unique'
-    })
+    return res.status(409).json({ error : 'existing user' })
+  }
+
+  existingUser = await User.findOne({ email })
+  if (existingUser) {
+    return res.status(409).json({ error : 'existing email' })
   }
 
   const saltRounds = 10

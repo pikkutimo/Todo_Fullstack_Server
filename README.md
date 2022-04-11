@@ -1,22 +1,28 @@
 # Todo_Fullstack_Server
 
+[![Deploy](https://github.com/pikkutimo/Todo_Fullstack_Server/actions/workflows/main.yml/badge.svg)](https://github.com/pikkutimo/Todo_Fullstack_Server/actions/workflows/main.yml)
+
 Backend for the Todo app.
 
-1. Add todos
-2. Edit todos
-3. Remove todos
-4. Mark as done
+1. Register a user
+2. Login user
+3. Add todos
+4. Edit todos
+5. Remove todos
+6. Mark as done
 
 ## Provided APIs
 
 /api/login
 /api/todos
-/api/login
+/api/signup
 
 **Added**
+Testing
 
-/api/signup
-/api/admin - not functional yet
+**Todo**
+- Refresh tokens
+- Edit user details
 
 ## Technologies
 
