@@ -7,7 +7,7 @@
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
     "deploy": "git push heroku main",
-    "test": "jest --verbose",
+    "test": "NODE_ENV=test jest --verbose",
     "lint": "eslint ."
   },
   "repository": {

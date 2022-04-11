@@ -49,7 +49,7 @@ test('Should not signup a new user with username already in use', async () => {
       password: 'jest123'
     })
 
-  expect(response.statusCode).toBe(409), 
+  expect(response.statusCode).toBe(409) 
 })
 
 test('Should signup a new user', async () => {
