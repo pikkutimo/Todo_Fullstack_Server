@@ -49,16 +49,16 @@ test('Should not signup a new user with username already in use', async () => {
       password: 'jest123'
     })
 
-  expect(response.statusCode).toBe(400)
+  expect(response.statusCode).toBe(409)
 })
 
 test('Should signup a new user', async () => {
   const response = await api.post('/api/signup')
     .send({
-      username: 'Jest',
-      name: 'Jest Jestson',
-      email: 'jest@jestson.com',
-      password: 'jest123'
+      username: 'omena',
+      name: 'Omenainen omena',
+      email: 'omena@omenainen.fi',
+      password: 'omena'
     })
 
   expect(response.statusCode).toBe(201)
