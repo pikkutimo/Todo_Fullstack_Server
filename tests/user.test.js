@@ -18,7 +18,7 @@ beforeEach( async () => {
     .send({
       username: 'test',
       name: 'Test Tetson',
-      email: 'test@tetson.com',
+      email: 'test@tetson.coma',
       password: 'test123'
     })
 
@@ -28,7 +28,7 @@ beforeEach( async () => {
       password: 'test123'
     })
 
-  receivedToken = response2.body.token
+  receivedToken = await response2.body.token
 
   const response3 = await api.post('/api/todos')
     .set('Authorization', `bearer ${receivedToken}`)
@@ -49,7 +49,7 @@ test('Should not signup a new user with username already in use', async () => {
       password: 'jest123'
     })
 
-  expect(response.statusCode).toBe(409) 
+  expect(response.statusCode).toBe(409)
 })
 
 test('Should signup a new user', async () => {
