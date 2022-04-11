@@ -9,6 +9,8 @@ const api = supertest(app)
 let receivedToken = null
 let postId = null
 
+configure({ asyncUtilTimeout: 5000 })
+
 beforeEach( async () => {
   //Clear the userdatabase
   await User.deleteMany()
@@ -49,7 +51,7 @@ test('Should not signup a new user with username already in use', async () => {
       password: 'jest123'
     })
 
-  expect(response.statusCode).toBe(409)
+  expect(response.statusCode).toBe(409), 
 })
 
 test('Should signup a new user', async () => {
