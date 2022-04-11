@@ -9,8 +9,6 @@ const api = supertest(app)
 let receivedToken = null
 let postId = null
 
-configure({ asyncUtilTimeout: 5000 })
-
 beforeEach( async () => {
   //Clear the userdatabase
   await User.deleteMany()
