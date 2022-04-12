@@ -4,12 +4,15 @@ const supertest = require('supertest')
 const User = require('../models/user')
 const Todo = require('../models/todo')
 const app = require('../app')
+const { JsonWebTokenError } = require('jsonwebtoken')
 const api = supertest(app)
 
 let receivedToken = null
 let postId = null
 
-beforeEach( async () => {
+
+
+beforeAll( async () => {
   //Clear the userdatabase
   await User.deleteMany()
   await Todo.deleteMany()
@@ -22,29 +25,47 @@ beforeEach( async () => {
       password: 'test123'
     })
 
-  const response2 = await api.post('/api/login')
+  await api.post('/api/login')
     .send({
       username: 'test',
       password: 'test123'
     })
-
-  const receivedResponse = await response2.body.token
-  receivedToken = receivedResponse.toString()
-  console.log('*******************')
-  console.log(receivedToken)
-  console.log('*******************')
-
-  const response3 = await api.post('/api/todos')
+    .then(response => {
+      receivedToken = response.body.token
+    })
+  
+  await api.post('/api/todos')
     .set('Authorization', `bearer ${receivedToken}`)
     .send({
       content: 'This is a todo',
       important: true
     })
+    .then(response =>{
+      postId = response.body.id
+  })
 
-  postId = await response3.body.id
+  expect(postId).toBeTruthy()
+  expect(receivedToken).toBeTruthy()
 })
 
-test('Should not signup a new user with username already in use', async () => {
+
+test('#1 - All routes without token respond with 401 - invalid token', async () => {
+  const response = await api.get('/')
+
+  expect(response.body.error).toBe('invalid token')
+  expect(response.statusCode).toBe(401)
+})
+
+test('#2 - All false routes with token respond with 404 - unknown endpoint', async () => {
+
+  const response = await api.get('/')
+    .set('Authorization', `bearer ${receivedToken}`)
+
+  expect(response.body.error).toBe('unknown endpoint')
+  expect(response.statusCode).toBe(404)
+})
+
+test('#2 - Should not signup a new user with username already in use', async () => {
   const response = await api.post('/api/signup')
     .send({
       username: 'test',
@@ -56,7 +77,7 @@ test('Should not signup a new user with username already in use', async () => {
   expect(response.statusCode).toBe(409)
 })
 
-test('Should signup a new user', async () => {
+test('#3 - Should signup a new user', async () => {
   const response = await api.post('/api/signup')
     .send({
       username: 'omena',
@@ -68,7 +89,7 @@ test('Should signup a new user', async () => {
   expect(response.statusCode).toBe(201)
 })
 
-test('Should login a newly created user', async () => {
+test('#4 - Should login a newly created user', async () => {
   const response = await api.post('/api/login')
     .send({
       username: 'test',
@@ -78,7 +99,7 @@ test('Should login a newly created user', async () => {
   expect(response.statusCode).toBe(200)
 })
 
-test('Logged user should be able to post new todos', async () => {
+test('#5 - Logged user should be able to post new todos', async () => {
   const response = await api.post('/api/todos')
     .set('Authorization', `bearer ${receivedToken}`)
     .send({
@@ -89,7 +110,7 @@ test('Logged user should be able to post new todos', async () => {
   expect(response.statusCode).toBe(201)
 })
 
-test('Logged user should be able to edit todos', async () => {
+test('#6 - Logged user should be able to edit todos', async () => {
 
   const response = await api.put(`/api/todos/${postId}`)
     .set('Authorization', `bearer ${receivedToken}`)

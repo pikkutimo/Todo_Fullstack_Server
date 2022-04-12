@@ -14,7 +14,7 @@ const unknownEndpoint = (req, res) => {
 }
 
 const errorLogger = (err, req, res, next) => {
-  logger.error('\x1b[31m', err)
+  logger.error({ error: err })
   next(err)
 }
 
