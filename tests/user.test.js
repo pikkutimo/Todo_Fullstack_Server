@@ -4,7 +4,6 @@ const supertest = require('supertest')
 const User = require('../models/user')
 const Todo = require('../models/todo')
 const app = require('../app')
-const { JsonWebTokenError } = require('jsonwebtoken')
 const api = supertest(app)
 
 let receivedToken = null
@@ -33,19 +32,23 @@ beforeAll( async () => {
     .then(response => {
       receivedToken = response.body.token
     })
-  
+
+  // expect(postId).toBeTruthy()
+  expect(receivedToken).toMatch(/^[A-Za-z0-9-_=].[A-Za-z0-9-_=].?[A-Za-z0-9-_.+/=]*$/)
+})
+
+beforeEach( async () => {
   await api.post('/api/todos')
     .set('Authorization', `bearer ${receivedToken}`)
     .send({
       content: 'This is a todo',
       important: true
     })
-    .then(response =>{
+    .then(response => {
       postId = response.body.id
-  })
+    })
 
-  expect(postId).toBeTruthy()
-  expect(receivedToken).toBeTruthy()
+  expect(postId).toEqual(expect.anything())
 })
 
 
@@ -54,7 +57,7 @@ test('#1 - All routes without token respond with 401 - invalid token', async () 
 
   expect(response.body.error).toBe('invalid token')
   expect(response.statusCode).toBe(401)
-})
+}), 5000
 
 test('#2 - All false routes with token respond with 404 - unknown endpoint', async () => {
 
@@ -63,7 +66,7 @@ test('#2 - All false routes with token respond with 404 - unknown endpoint', asy
 
   expect(response.body.error).toBe('unknown endpoint')
   expect(response.statusCode).toBe(404)
-})
+}), 5000
 
 test('#2 - Should not signup a new user with username already in use', async () => {
   const response = await api.post('/api/signup')
