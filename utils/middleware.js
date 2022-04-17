@@ -34,10 +34,15 @@ const errorHandler = (error, req, res, next) => {
   next(error)
 }
 
-const verifyToken = (req, res, next) => {
+const verifyToken = (error, req, res, next) => {
+  const { TokenExpiredError } = jwt
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
   const decodedToken = jwt.verify(token, process.env.SECRET)
+
+  if (error instanceof TokenExpiredError) {
+    return res.sendStatus(401).json({ error: 'token expired' })
+  }
 
   if (!token || !decodedToken.id)
     return res.sendStatus(401).json({ error: 'token missing or invalid' })
