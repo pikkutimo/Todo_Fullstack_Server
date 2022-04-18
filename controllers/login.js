@@ -31,7 +31,7 @@ loginRouter.post('/', async (req, res) => {
   )
 
   let refreshToken = await RefreshToken.createToken(userForToken)
-  console.log(refreshToken)
+  // console.log(refreshToken)
   res
     .status(200)
     .send({ token, refreshToken, username: user.username, name: user.name })
