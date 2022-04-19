@@ -21,35 +21,45 @@ const errorLogger = (err, req, res, next) => {
 const errorHandler = (error, req, res, next) => {
   logger.error(error.message)
 
-  if (error.name === 'CastError') {
-    return res.status(400).send({ error: 'malformatted id' })
+  if (error instanceof jwt.TokenExpiredError) {
+    return res.status(401).send({ error: 'Token exprired!' })
+  } else if (error instanceof jwt.JsonWebTokenError) {
+    return res.status(401).send({ error: 'Token missing or invalid!' })
+  }
+  else if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'Malformatted id!' })
   } else if (error.name === 'ValidationError') {
     return res.status(400).send({ error: error.message })
-  }  else if (error.name === 'JsonWebTokenError') {
-    return res.status(401).json({
-      error: 'invalid token'
-    })
   }
 
   next(error)
 }
 
-const verifyToken = (error, req, res, next) => {
-  // const { TokenExpiredError } = jwt
+const verifyToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
-  const decodedToken = jwt.verify(token, process.env.SECRET)
+  let decodedToken
 
-  // if (error instanceof TokenExpiredError) {
-  //   return res.sendStatus(401).json({ error: 'token expired' })
-  // }
+  try {
+    decodedToken = jwt.verify(token, process.env.SECRET)
+    req.payload = decodedToken.id
+    next()
+  } catch(error) {
+    next(error)
+  }
+  // const { TokenExpiredError } = jwt
+  // const authHeader = req.headers['authorization']
+  // const token = authHeader && authHeader.split(' ')[1]
+  // const decodedToken = jwt.verify(token, process.env.SECRET)
 
-  if (!token || !decodedToken.id)
-    return res.sendStatus(401).json({ error: 'token missing or invalid' })
+  // // if (error instanceof TokenExpiredError) {
+  // //   return res.sendStatus(401).json({ error: 'token expired' })
+  // // }
 
-  req.payload = decodedToken.id
-
-  next()
+  // if (!token || !decodedToken.id)
+  //   return res.sendStatus(401).json({ error: 'token missing or invalid' })
+  //
+  // next()
 }
 
 

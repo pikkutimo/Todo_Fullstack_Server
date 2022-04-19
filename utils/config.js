@@ -8,7 +8,7 @@ const MONGODB_URI = process.env.NODE_ENV === 'test'
 
 
 const RTOKEN_LENGTH = 86400
-const TOKEN_LENGTH = 120
+const TOKEN_LENGTH = 60
 
 module.exports = {
   MONGODB_URI,
