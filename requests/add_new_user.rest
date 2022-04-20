@@ -2,8 +2,8 @@ POST http://localhost:3002/api/signup
 Content-Type: application/json
 
 {
-    "username": "testi1000000000",
-    "name": "testi sata 222",
-    "password": "testi",
-    "email": "testi@sata.com"
+    "username": "frans",
+    "name": "frans vilen",
+    "password": "frans",
+    "email": "frans@frans.com"
 }

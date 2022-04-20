@@ -10,6 +10,7 @@ const signupRouter = require('./controllers/signup')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
+const refreshRouter = require('./controllers/refresh')
 
 logger.info('connecting to', config.MONGODB_URI)
 
@@ -29,6 +30,7 @@ app.use(middleware.requestLogger)
 
 app.use('/api/login', loginRouter)
 app.use('/api/signup', signupRouter)
+app.use('/api/refresh', refreshRouter)
 app.use(middleware.verifyToken)
 app.use('/api/todos', todoRouter)
 app.use('/api/users', userRouter)

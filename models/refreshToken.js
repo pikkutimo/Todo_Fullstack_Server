@@ -12,7 +12,7 @@ const refreshTokenSchema = new mongoose.Schema({
   expirationDate: Date,
 })
 
-refreshTokenSchema.statics.createToken = async (user) => {
+refreshTokenSchema.statics.createToken = async (id) => {
   let expiredAt = new Date()
   expiredAt.setSeconds(
     expiredAt.getSeconds() + config.RTOKEN_LENGTH
@@ -22,7 +22,7 @@ refreshTokenSchema.statics.createToken = async (user) => {
 
   let _object = new RefreshToken({
     refreshToken: _token,
-    user: user.id,
+    user: id,
     expirationDate: expiredAt.getTime(),
   })
 

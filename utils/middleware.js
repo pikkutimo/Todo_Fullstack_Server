@@ -25,11 +25,16 @@ const errorHandler = (error, req, res, next) => {
     return res.status(401).send({ error: 'Token exprired!' })
   } else if (error instanceof jwt.JsonWebTokenError) {
     return res.status(401).send({ error: 'Token missing or invalid!' })
-  }
-  else if (error.name === 'CastError') {
+  } else if (error.name === 'CastError') {
     return res.status(400).send({ error: 'Malformatted id!' })
   } else if (error.name === 'ValidationError') {
     return res.status(400).send({ error: error.message })
+  } else if (error.name === 'LoginError') {
+    return res.status(401).send({ error: 'Invalid username or password!' })
+  } else if (error.name === 'UserError') {
+    return res.status(401).send({ error: 'Existing username or email!' })
+  }else if (error.type === 'Refreshtoken expired') {
+    return res.status(403).send({ error: 'Refreshtoken expired!' })
   }
 
   next(error)
@@ -47,19 +52,6 @@ const verifyToken = (req, res, next) => {
   } catch(error) {
     next(error)
   }
-  // const { TokenExpiredError } = jwt
-  // const authHeader = req.headers['authorization']
-  // const token = authHeader && authHeader.split(' ')[1]
-  // const decodedToken = jwt.verify(token, process.env.SECRET)
-
-  // // if (error instanceof TokenExpiredError) {
-  // //   return res.sendStatus(401).json({ error: 'token expired' })
-  // // }
-
-  // if (!token || !decodedToken.id)
-  //   return res.sendStatus(401).json({ error: 'token missing or invalid' })
-  //
-  // next()
 }
 
 
