@@ -1,9 +1,0 @@
-PUT http://localhost:3002/api/todos/623057e7d7407678b34aeb6d
-Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZyYW5zIiwiaWQiOiI2MjMwNTVhMTYzZDQxYTNlZjdmNTRmNzYiLCJpYXQiOjE2NDczMzkwMzgsImV4cCI6MTY0NzM0MjYzOH0.MgBf-WFw_ZHde9WVVS10M2YSbYdFZClJVz7_yDHug5A
-
-{
-    "content": "FRANS - auth test #1 - edit",
-    "important": true,
-    "done": true
-}

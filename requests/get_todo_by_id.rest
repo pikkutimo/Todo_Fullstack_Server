@@ -1,3 +1,0 @@
-GET http://localhost:3002/api/todos/623057e7d7407678b34aeb6d
-Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZyYW5zIiwiaWQiOiI2MjMwNTVhMTYzZDQxYTNlZjdmNTRmNzYiLCJpYXQiOjE2NDczMzQ4NjcsImV4cCI6MTY0NzMzODQ2N30.fnSd5Li05XXVroW_skvF11hZHTkEEXyIk6w7rq6Yb6E

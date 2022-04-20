@@ -1,9 +1,0 @@
-PUT https://rocky-harbor-47876.herokuapp.com/api/todos/6242be262d4ad1fbb399c0aa
-Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZyYW5zIiwiaWQiOiI2MjMwNTVhMTYzZDQxYTNlZjdmNTRmNzYiLCJpYXQiOjE2NDg1NDExODksImV4cCI6MTY0ODU0NDc4OX0.wPvdNU79iRGjWPd0na5QUIny57nnP9whH8F9dMsRhp4
-
-{
-    "content": "FRANS - 29032022 - edit the newest added",
-    "important": true,
-    "done": true
-}

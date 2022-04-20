@@ -1,3 +1,0 @@
-DELETE http://localhost:3002/api/todos/6230627737165c3c4de1a5d3
-Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2c2VybmFtZSI6ImZyYW5zIiwiaWQiOiI2MjMwNTVhMTYzZDQxYTNlZjdmNTRmNzYiLCJpYXQiOjE2NDczMzQ4NjcsImV4cCI6MTY0NzMzODQ2N30.fnSd5Li05XXVroW_skvF11hZHTkEEXyIk6w7rq6Yb6E
