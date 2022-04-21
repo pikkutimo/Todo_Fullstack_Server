@@ -1,21 +1,20 @@
-const bcrypt = require('bcrypt')
+// const bcrypt = require('bcrypt')
 const signupRouter = require('express').Router()
 const User = require('../models/user')
+const userTools = require('../utils/userTools')
 
 signupRouter.post('/', async ( req, res, next ) => {
   const { username, name, password, email } = req.body
 
   try {
-    let existingUser = await User.find({ '$or': [{ email: email }, { username: username }] })
+    let existingUser = await User.findOne({ '$or': [{ email: email }, { username: username }] })
     if (existingUser) {
       console.log('existing user')
       throw new Error()
     }
 
-    const saltRounds = 10
-    const passwordHash = await bcrypt.hash(password, saltRounds)
+    const passwordHash = await userTools.hashPassword(password)
 
-    console.log('password')
     const user = new User({
       username,
       name,

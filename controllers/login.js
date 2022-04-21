@@ -1,10 +1,10 @@
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
 const User = require('../models/user')
 const RefreshToken = require('../models/refreshToken')
-const config = require('../utils/config')
-const createToken = require('../utils/userTools')
+// const config = require('../utils/config')
+const userTools = require('../utils/userTools')
 
 loginRouter.post('/', async (req, res, next) => {
   const { username, password } = req.body
@@ -18,12 +18,12 @@ loginRouter.post('/', async (req, res, next) => {
     if (!passwordCorrect) {
       throw new Error
     }
-    const token = createToken(user.username, user._id)
+    const token = userTools.createToken(user.username, user._id)
     let refreshToken = await RefreshToken.createToken(user._id)
 
     res
       .status(200)
-      .send({ token, refreshToken, username: user.username, name: user.name })
+      .send({ token, refreshToken, username: user.username, name: user.name, id: user._id })
   } catch (error) {
     error.name = 'LoginError'
     next(error)

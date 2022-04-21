@@ -1,6 +1,6 @@
 const RefreshToken = require('../models/refreshToken')
 const refreshRouter = require('express').Router()
-const createToken = require('../utils/userTools')
+const userTools = require('../utils/userTools')
 
 refreshRouter.post('/', async (req, res, next) => {
   const { requestToken, username, } = req.body
@@ -14,7 +14,7 @@ refreshRouter.post('/', async (req, res, next) => {
       throw new Error()
     }
 
-    const newAccessToken = createToken(username, refreshToken.user)
+    const newAccessToken = userTools.createToken(username, refreshToken.user)
 
     res.status(200).json({
       token: newAccessToken,
