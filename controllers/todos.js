@@ -72,15 +72,7 @@ todoRouter.put('/:id', async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-  Todo.findByIdAndUpdate(
-    req.params.id,
-    { content, important, done },
-    { new:true, runValidators: true, context: 'query' }
-  )
-  //   .then(updateTodo => {
-  //     res.json(updateTodo)
-  //   })
-  //   .catch(error => next(error))
+
 })
 
 module.exports = todoRouter
