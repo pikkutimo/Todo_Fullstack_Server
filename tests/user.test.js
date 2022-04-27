@@ -162,7 +162,7 @@ describe("Test the paths", () => {
         email: 'jest@jestson.com'
       })
       .expect(200)
-  }), 5000
+  }), 10000
 
   test('#10 - With refreshToken, user can create new accessToken', async () => {
 
