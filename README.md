@@ -13,16 +13,17 @@ Backend for the Todo app.
 
 ## Provided APIs
 
-/api/login
-/api/todos
-/api/signup
+/api/login<br>
+/api/todos<br>
+/api/signup<br>
+/api/refresh<br>
 
-**Added**
-Testing
+**Added**<br>
+Testing<br>
+Refresh tokens<br>
+Edit user details<br>
 
 **Todo**
-- Refresh tokens
-- Edit user details
 
 ## Technologies
 
