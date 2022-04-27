@@ -23,7 +23,7 @@ loginRouter.post('/', async (req, res, next) => {
 
     res
       .status(200)
-      .send({ token, refreshToken, username: user.username, name: user.name, id: user._id })
+      .send({ token, refreshToken, username: user.username, name: user.name, id: user._id, email: user.email })
   } catch (error) {
     error.name = 'LoginError'
     next(error)
