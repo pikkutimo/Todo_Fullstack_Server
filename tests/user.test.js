@@ -63,7 +63,7 @@ describe("Test the paths", () => {
 
     expect(response.body.error).toBe('Token missing or invalid!')
     expect(response.statusCode).toBe(401)
-  }), 5000
+  }, 5000)
 
   test('#2 - All false routes with token respond with 404 - unknown endpoint', async () => {
 
@@ -72,7 +72,7 @@ describe("Test the paths", () => {
 
     expect(response.body.error).toBe('unknown endpoint')
     expect(response.statusCode).toBe(404)
-  }), 5000
+  }, 5000)
 
   test('#2 - Should not signup a new user with username already in use', async () => {
     const response = await api.post('/api/signup')
@@ -152,8 +152,8 @@ describe("Test the paths", () => {
   })
 
   test('#9 - Logged user should be able to edit userprofile', async () => {
-
-    const response = await api.put(`/api/users/${userId}`)
+    expect.assertions(1)
+    api.put(`/api/users/${userId}`)
       .set('Authorization', `bearer ${receivedToken}`)
       .send({
         username: 'alteration',
@@ -162,7 +162,7 @@ describe("Test the paths", () => {
         email: 'jest@jestson.com'
       })
       .expect(200)
-  })
+  }, 5000)
 
   test('#10 - With refreshToken, user can create new accessToken', async () => {
 
@@ -177,9 +177,6 @@ describe("Test the paths", () => {
     expect(response.body.token).not.toEqual(receivedToken)
   })
 
-  afterAll(() => {
-    mongoose.connection.close()
-  })
 })
 
 describe("Test the methods of userTools", () => {
@@ -201,4 +198,8 @@ describe("Test the methods of userTools", () => {
 
   expect(hash).toEqual(comparisonHash)
   })
+})
+
+afterAll(() => {
+  mongoose.connection.close()
 })
