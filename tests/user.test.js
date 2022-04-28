@@ -153,16 +153,16 @@ describe("Test the paths", () => {
 
   test('#9 - Logged user should be able to edit userprofile', async () => {
 
-    await api.put(`/api/users/${userId}`)
+    const response = await api.put(`/api/users/${userId}`)
       .set('Authorization', `bearer ${receivedToken}`)
       .send({
-        username: 'jest',
+        username: 'alteration',
         name: 'Jest Jettison',
         password: 'test123',
         email: 'jest@jestson.com'
       })
       .expect(200)
-  }), 10000
+  })
 
   test('#10 - With refreshToken, user can create new accessToken', async () => {
 

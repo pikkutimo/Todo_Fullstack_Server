@@ -33,6 +33,8 @@ usersRouter.put('/:id', async (req, res, next) => {
       { new: true }
     )
 
+    res.status(200)
+
   } catch (error) {
     next(error)
   }
